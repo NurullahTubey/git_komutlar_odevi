@@ -1,0 +1,32 @@
+[
+    {
+        "Ad": "Nurullah",
+        "Vize": 50.0,
+        "Final": 70.0,
+        "Ortalama": 62.0
+    },
+    {
+        "Ad": "Hasan ",
+        "Vize": 80.0,
+        "Final": 60.0,
+        "Ortalama": 68.0
+    },
+    {
+        "Ad": "Buse",
+        "Vize": 75.0,
+        "Final": 65.0,
+        "Ortalama": 69.0
+    },
+    {
+        "Ad": "Bilal Emre",
+        "Vize": 95.0,
+        "Final": 32.0,
+        "Ortalama": 57.2
+    },
+    {
+        "Ad": "Oykum",
+        "Vize": 65.0,
+        "Final": 86.0,
+        "Ortalama": 77.6
+    }
+]
