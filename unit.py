@@ -1,57 +1,29 @@
 import unittest
-from unittest.mock import patch, mock_open
-import json
+from Deneme import hesapla_gecme_notu  # Burada 'Deneme.py' dosyasındaki fonksiyonu import ediyoruz
 
-# Test edilecek fonksiyonlar
-from ogrenci_programi import save_to_json, load_from_json  # Programdaki fonksiyonlar import edilmelidir
+class TestHesaplaGecmeNotu(unittest.TestCase):
 
-class TestOgrenciProgrami(unittest.TestCase):
+    def test_gecme(self):
+        """Geçme durumu testi (50 ve üzeri notlar için)"""
+        self.assertEqual(hesapla_gecme_notu(60, 60), "Geçti")
+        self.assertEqual(hesapla_gecme_notu(70, 50), "Geçti")
+        self.assertEqual(hesapla_gecme_notu(40, 80), "Geçti")
+    
+    def test_kalma(self):
+        """Kalma durumu testi (50 altı notlar için)"""
+        self.assertEqual(hesapla_gecme_notu(40, 40), "Kaldı")
+        self.assertEqual(hesapla_gecme_notu(20, 40), "Kaldı")
+        self.assertEqual(hesapla_gecme_notu(30, 20), "Kaldı")
+    
+    def test_sinirlarda_gecme(self):
+        """Sınırda geçme testi (tam olarak 50 alan öğrenci)"""
+        self.assertEqual(hesapla_gecme_notu(50, 50), "Geçti")
+        self.assertEqual(hesapla_gecme_notu(45, 55), "Geçti")
+    
+    def test_sinirlarda_kalma(self):
+        """Sınırda kalma testi (tam olarak 49.99 alan öğrenci)"""
+        self.assertEqual(hesapla_gecme_notu(40, 50), "Kaldı")
+        self.assertEqual(hesapla_gecme_notu(30, 40), "Kaldı")
 
-    @patch("builtins.open", new_callable=mock_open)
-    @patch("json.dump")
-    def test_save_to_json(self, mock_json_dump, mock_open):
-        # Test verisi
-        data = [
-            {"Ad": "Ahmet", "Vize": 60, "Final": 80, "Ortalama": 72.0},
-            {"Ad": "Mehmet", "Vize": 75, "Final": 85, "Ortalama": 80.0}
-        ]
-        
-        # Fonksiyonu çağır
-        save_to_json(data)
-        
-        # open fonksiyonunun doğru çağrıldığını kontrol et
-        mock_open.assert_called_once_with("ogrenciler.json", "w", encoding="utf-8")
-        
-        # json.dump fonksiyonunun doğru çağrıldığını kontrol et
-        mock_json_dump.assert_called_once_with(data, mock_open(), ensure_ascii=False, indent=4)
-
-    @patch("builtins.open", new_callable=mock_open, read_data='[{"Ad": "Ahmet", "Vize": 60, "Final": 80, "Ortalama": 72.0}]')
-    @patch("json.load")
-    def test_load_from_json(self, mock_json_load, mock_open):
-        # mock_json_load fonksiyonunun dönmesi gereken veriyi belirt
-        mock_json_load.return_value = [{"Ad": "Ahmet", "Vize": 60, "Final": 80, "Ortalama": 72.0}]
-        
-        # Fonksiyonu çağır
-        result = load_from_json()
-        
-        # open fonksiyonunun doğru çağrıldığını kontrol et
-        mock_open.assert_called_once_with("ogrenciler.json", "r", encoding="utf-8")
-        
-        # json.load fonksiyonunun doğru çağrıldığını kontrol et
-        mock_json_load.assert_called_once_with(mock_open())
-        
-        # Sonucun doğru olduğunu kontrol et
-        self.assertEqual(result, [{"Ad": "Ahmet", "Vize": 60, "Final": 80, "Ortalama": 72.0}])
-
-    @patch("builtins.open", new_callable=mock_open)
-    def test_load_from_json_file_not_found(self, mock_open):
-        # FileNotFoundError durumunda boş bir liste döndürmeliyiz
-        mock_open.side_effect = FileNotFoundError
-        
-        result = load_from_json()
-        
-        # Dosya bulunmadığında boş bir liste dönecek
-        self.assertEqual(result, [])
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
